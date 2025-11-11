@@ -2,8 +2,11 @@ import express from 'express';
 
 const host ='0.0.0.0';
 const porta =3000;
+var listaFornecedores=[];
 
 const server = express();
+
+server.use(express.urlencoded({extended: true}));
 
 server.get('/', (requisicao,resposta) => { 
     resposta.send(`
@@ -141,35 +144,35 @@ server.get('/cadastroEmpresa', (requisicao,resposta) => {
         </style>
         </head>
         <body>
-            <form action="/cadastrar-fornecedor" method="POST">
+            <form method="POST" action="/adicionarFornecedor">
             <h2>Cadastro de Fornecedor</h2>
 
             <label for="cnpj">CNPJ:</label><br>
-            <input type="text" id="cnpj" name="cnpj" required><br><br>
+            <input type="text" id="cnpj" name="cnpj"><br><br>
 
             <label for="razaoSocial">Razão Social / Nome do Fornecedor:</label><br>
-            <input type="text" id="razaoSocial" name="razaoSocial" placeholder="Ex: Moraes & Irmãos Ltda" required><br><br>
+            <input type="text" id="razaoSocial" name="razaoSocial" placeholder="Ex: Moraes & Irmãos Ltda"><br><br>
 
             <label for="nomeFantasia">Nome Fantasia:</label><br>
-            <input type="text" id="nomeFantasia" name="nomeFantasia" placeholder="Ex: Loja do 1,99" required><br><br>
+            <input type="text" id="nomeFantasia" name="nomeFantasia" placeholder="Ex: Loja do 1,99"><br><br>
 
             <label for="endereco">Endereço:</label><br>
-            <input type="text" id="endereco" name="endereco" required><br><br>
+            <input type="text" id="endereco" name="endereco"><br><br>
 
             <label for="cidade">Cidade:</label><br>
-            <input type="text" id="cidade" name="cidade" required><br><br>
+            <input type="text" id="cidade" name="cidade"><br><br>
 
             <label for="uf">UF:</label><br>
-            <input type="text" id="uf" name="uf" maxlength="2" placeholder="SP" required><br><br>
+            <input type="text" id="uf" name="uf" maxlength="2" placeholder="SP"><br><br>
 
             <label for="cep">CEP:</label><br>
-            <input type="text" id="cep" name="cep" placeholder="00000-000" required><br><br>
+            <input type="text" id="cep" name="cep" placeholder="00000-000"><br><br>
 
             <label for="email">E-mail:</label><br>
-            <input type="email" id="email" name="email" required><br><br>
+            <input type="email" id="email" name="email"><br><br>
 
             <label for="telefone">Telefone:</label><br>
-            <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" required><br><br>
+            <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000"><br><br>
 
             <button type="submit">Cadastrar</button>
         </form>
@@ -183,6 +186,81 @@ server.get('/cadastroEmpresa', (requisicao,resposta) => {
  `)
 
 });
+
+server.post('/adicionarFornecedor', (requisicao,resposta) => {
+    const cnpj = requisicao.body.cnpj;
+    const razaoSocial = requisicao.body.razaoSocial
+    const nomeFantasia = requisicao.body.nomeFantasia;
+    const endereco = requisicao.body.endereco;
+    const cidade = requisicao.body.cidade;
+    const uf = requisicao.body.uf;
+    const cep = requisicao.body.cep;
+    const email = requisicao.body.email;
+    const telefone = requisicao.body.telefone;
+
+    listaFornecedores.push({cnpj, razaoSocial, nomeFantasia, endereco, cidade, uf, cep, email, telefone});
+    resposta.redirect("/listarUsuarios");
+
+});
+
+server.get("/listarUsuarios", (requisicao, resposta) => {
+    let conteudo = `
+                    <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Lista de Fornecedores</title>
+        </head>
+        <body>
+                <div>
+                    <h1 class="text-center m-3 p-3 bg-light"> </h1>
+
+                    <table class="table table-striped">
+                    <thead>
+                    <tr> 
+                        <th>Cnpj</th>
+                        <th> Razao social </th>
+                        <th> Nome fantasia </th>
+                        <th> Endereco </th>
+                        <th> Cidade </th>
+                        <th> UF </th>
+                        <th> Cep </th> 
+                        <th> Email </th>
+                        <th> Telefone </th>
+                    </tr>
+                    </thead>
+                    <tbody> `;
+
+            for(let i =0; i<listaFornecedores.length; i++){
+
+                conteudo +=`
+                    <tr>
+                        <td>` +listaFornecedores[i].cnpj` </td>
+                        <td>` +listaFornecedores[i].razaoSocial` </td>
+                        <td>` +listaFornecedores[i].nomeFantasia` </td>
+                        <td>` +listaFornecedores[i].endereco` </td>
+                        <td>` +listaFornecedores[i].cidade`  </td>
+                        <td>` +listaFornecedores[i].uf` </td>
+                        <td>` +listaFornecedores[i].cep` </td>
+                        <td>` +listaFornecedores[i].email` </td>
+                        <td>` +listaFornecedores[i].telefone` </td>
+                        <td> </td>
+                    </tr>
+
+                
+                `;
+            }
+                conteudo +=`<tbody>
+                </table>
+                </div>`
+
+
+                resposta.send(conteudo);
+       
+    
+    
+})
 
 
 
