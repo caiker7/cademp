@@ -1,0 +1,21 @@
+{
+  "name": "cademp",
+  "version": "1.0.0",
+  "description": "atividade para criar cadastro de empresas",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caiker7/cademp.git"
+  },
+  "author": "caike silva tardim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caiker7/cademp/issues"
+  },
+  "homepage": "https://github.com/caiker7/cademp#readme"
+}
