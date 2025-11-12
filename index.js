@@ -251,16 +251,19 @@ server.get("/listarUsuarios", (requisicao, resposta) => {
                 
                 `;
             }
-                conteudo +=`<tbody>
-                </table>
-                </div>`
+          conteudo +=`
+                            <tbody>
+                        </table>
+                 </div>
+                 </html>
 
+
+
+`
 
                 resposta.send(conteudo);
        
-    
-    
-})
+});
 
 
 
